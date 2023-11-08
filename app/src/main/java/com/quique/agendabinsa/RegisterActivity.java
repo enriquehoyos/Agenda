@@ -143,52 +143,69 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void saveClient() {
-        DataBaseSQLiteHelper dataBaseSQLiteHelper = new DataBaseSQLiteHelper(this, "Agenda", null, 1 );
-        SQLiteDatabase bd= dataBaseSQLiteHelper.getWritableDatabase();
-        String name = etName.getText().toString();
-        String home = etHome.getText().toString();
-        String postalCode = etPostalCode.getText().toString();
-        String poblacion = etPoblacion.getText().toString();
-        if (clientExists(name)) {
-            Toast.makeText(this, "Cliente ya registrado", Toast.LENGTH_SHORT).show();
-            return;
+    private void saveClient() {
+        if(validateDataClient()){
+            DataBaseSQLiteHelper dataBaseSQLiteHelper = new DataBaseSQLiteHelper(this, "Agenda", null, 1 );
+            SQLiteDatabase bd= dataBaseSQLiteHelper.getWritableDatabase();
+            String name = etName.getText().toString();
+            String home = etHome.getText().toString();
+            String postalCode = etPostalCode.getText().toString();
+            String poblacion = etPoblacion.getText().toString();
+            if (clientExists(name)) {
+                Toast.makeText(this, "Cliente ya registrado", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ContentValues registro=new ContentValues();
+            registro.put("name",name);
+            registro.put("address",home);
+            registro.put("postalCod",postalCode);
+            registro.put("district",poblacion);
+
+            bd.insert("clients",null,registro);
+            bd.close();
+            clear();
+            Toast.makeText(this,"Se cargaron los datos del Cliente",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this,"Debe rellenar todos los campos",Toast.LENGTH_SHORT).show();
         }
-
-        ContentValues registro=new ContentValues();
-        registro.put("name",name);
-        registro.put("address",home);
-        registro.put("postalCod",postalCode);
-        registro.put("district",poblacion);
-
-        bd.insert("clients",null,registro);
-        bd.close();
-        clear();
-        Toast.makeText(this,"Se cargaron los datos del Cliente",Toast.LENGTH_SHORT).show();
     }
 
-    public void saveContact(){
-        DataBaseSQLiteHelper dataBaseSQLiteHelper = new DataBaseSQLiteHelper(this, "Agenda", null, 1 );
-        SQLiteDatabase bd= dataBaseSQLiteHelper.getWritableDatabase();
-        String name = etName.getText().toString();
-        String client = spClient.getSelectedItem().toString();
-        String phone = etPhone.getText().toString();
-        String email = etEmail.getText().toString();
-        if (contactExists(phone)) {
-            Toast.makeText(this, "Cliente ya registrado", Toast.LENGTH_SHORT).show();
-            return;
+    private Boolean validateDataClient(){
+        return etName.getText().length() > 0 && etHome.getText().length() > 0 && etPostalCode.getText().length() > 0 && etPoblacion.getText().length() > 0;
+    }
+
+    private Boolean validateDataContact(){
+        return etName.getText().length() > 0 && etPhone.getText().length() > 0 && etEmail.getText().length() > 0;
+    }
+
+    private void saveContact(){
+        if(validateDataClient()){
+
+            DataBaseSQLiteHelper dataBaseSQLiteHelper = new DataBaseSQLiteHelper(this, "Agenda", null, 1 );
+            SQLiteDatabase bd= dataBaseSQLiteHelper.getWritableDatabase();
+            String name = etName.getText().toString();
+            String client = spClient.getSelectedItem().toString();
+            String phone = etPhone.getText().toString();
+            String email = etEmail.getText().toString();
+            if (contactExists(phone)) {
+                Toast.makeText(this, "Cliente ya registrado", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ContentValues registro=new ContentValues();
+            registro.put("clientId",getClientId(client));
+            registro.put("name",name);
+            registro.put("phone",phone);
+            registro.put("email",email);
+
+            bd.insert("contacts",null,registro);
+            bd.close();
+            clear();
+            Toast.makeText(this,"Se cargaron los datos del Contacto",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this,"Debe rellenar todos los campos",Toast.LENGTH_SHORT).show();
         }
-
-        ContentValues registro=new ContentValues();
-        registro.put("clientId",getClientId(client));
-        registro.put("name",name);
-        registro.put("phone",phone);
-        registro.put("email",email);
-
-        bd.insert("contacts",null,registro);
-        bd.close();
-        clear();
-        Toast.makeText(this,"Se cargaron los datos del Contacto",Toast.LENGTH_SHORT).show();
     }
 
     public int getClientId(String client){
