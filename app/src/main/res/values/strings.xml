@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">AgendaBinsa</string>
+
+    <string name="registrar">Registrar</string>
+    <string name="consultar">Editar</string>
+    <string name="listar">Listar</string>
+
+    <string name="registrarClient">Registrar Cliente</string>
+    <string name="registrarContact">Registrar Contacto</string>
+    <string name="edit">Editar</string>
+    <string name="editarClient">Cliente a editar</string>
+    <string name="editarContact">Contacto a editar</string>
+    <string name="listContact">Lista Contacto</string>
+
+    <string name="idClient">Id</string>
+    <string name="nameClient">Nombre</string>
+    <string name="nameClientID">Nombre Empresa</string>
+    <string name="home">Domicilio</string>
+    <string name="postal_ode">Codigo Postal</string>
+    <string name="poblacion">Población</string>
+    <string name="phone">Telefono</string>
+    <string name="email">Email</string>
+    <string name="save">Guardar</string>
+    <string name="delete">Eliminar</string>
+</resources>
